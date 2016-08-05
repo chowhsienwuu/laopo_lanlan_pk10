@@ -66,9 +66,9 @@ void MainWindow::processOneLine(QString *line)
         t_str = t_str.remove(QChar(','));
         t_custerStruct.winorlse = t_str.toDouble(); //170.7
 
-        if (t_custerStruct.type.startsWith("c"))
+        if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive))
         {
-            t_custerStruct.payback = t_custerStruct.journal * 0.022;
+            t_custerStruct.payback = t_custerStruct.journal * journalpercet;
             mTotlePayback += t_custerStruct.payback;
         }else {
             t_custerStruct.payback = 0;
@@ -151,7 +151,7 @@ void MainWindow::fastPayback()
 
     t_str = t_str.remove(QChar(','));
     double journal = t_str.toDouble(); //
-    journal *= 0.022;
+    journal *= journalpercet;
     QString show = "退水: " +   QString::number(journal);
 
     ui->fastPaybacklable->setText(show);

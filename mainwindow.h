@@ -37,6 +37,8 @@ private:
     QList<T_custerStruct> mCusterList;
     T_custerStruct mTotle;
 
+    double journalpercet = 0.024;
+
 private slots:
     void progress();
     void clear();
