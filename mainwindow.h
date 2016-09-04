@@ -19,8 +19,9 @@ public:
 private:
     Ui::MainWindow *ui;
     QTableView *mRsultTAbleView = NULL;
-    QStandardItemModel *mcusterItem = new QStandardItemModel();
-    void processOneLine(QString *line);
+    QStandardItemModel *mcusterItem ;
+    void processOneLineXinshiji(QString *line);
+    void processOneLinebaoxuan(QString *line);
 
     QString mTableTime;
     double mTotlePayback;
@@ -31,14 +32,23 @@ private:
         QString type;
         double journal; //
         double winorlse;
-        double payback;
+        int payback;
     }T_custerStruct;
 
     QList<T_custerStruct> mCusterList;
     T_custerStruct mTotle;
 
-    double journalpercet = 0.024;
+    double journalpercet;
 
+    int intFloor(double in);
+
+    //platfrom.
+
+    const int PLATFORM_UNKONW = 0X0;
+    const int PLATFORM_XINSHIJI = 0x01;
+    const int PLATFORM_BAOXUAN  = 0202;
+    int mCurrentPlatform;
+    void detectPlatFrom(QString &str);
 private slots:
     void progress();
     void clear();

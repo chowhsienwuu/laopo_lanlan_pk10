@@ -21,8 +21,10 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui
 
 DISTFILES += \
-    love.rc
+    love.rc \
+    changelog.txt
 
 RESOURCES += \
     launch.qrc
 RC_FILE = love.rc
+
