@@ -91,7 +91,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>将总报表复制到左边框内点计算即可,D盘退水0.024,A盘不退</string>
+     <string>将总报表复制到左边框内即可,C盘D盘退水0.024,A盘不退</string>
     </property>
    </widget>
    <widget class="QPushButton" name="clearButton">
@@ -477,6 +477,27 @@
      <number>-1</number>
     </property>
    </widget>
+   <zorder>okButton</zorder>
+   <zorder>plainsrcTextEdit</zorder>
+   <zorder>label_time</zorder>
+   <zorder>label</zorder>
+   <zorder>clearButton</zorder>
+   <zorder>fastpayback_src</zorder>
+   <zorder>label_2</zorder>
+   <zorder>line</zorder>
+   <zorder>line_2</zorder>
+   <zorder>fastPaybacklable</zorder>
+   <zorder>label_3</zorder>
+   <zorder>label_4</zorder>
+   <zorder>label_5</zorder>
+   <zorder>label_6</zorder>
+   <zorder>label_7</zorder>
+   <zorder>label_8</zorder>
+   <zorder>label_9</zorder>
+   <zorder>label_10</zorder>
+   <zorder>label_11</zorder>
+   <zorder>label_12</zorder>
+   <zorder>tableView</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

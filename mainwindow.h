@@ -46,7 +46,7 @@ private:
 
     const int PLATFORM_UNKONW = 0X0;
     const int PLATFORM_XINSHIJI = 0x01;
-    const int PLATFORM_BAOXUAN  = 0202;
+    const int PLATFORM_BAOXUAN  = 0x02;
     int mCurrentPlatform;
     void detectPlatFrom(QString &str);
 private slots:

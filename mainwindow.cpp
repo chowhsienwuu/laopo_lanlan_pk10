@@ -4,6 +4,7 @@
 #include <iostream>
 #include "QDebug"
 #include <QDoubleSpinBox>
+#include <QItemDelegate>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //    mcusterItem->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("序号")));
     mcusterItem->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("帐号")));
     mcusterItem->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("名称")));
-    mcusterItem->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("有效金额")));
+    mcusterItem->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("流水")));
     mcusterItem->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("输赢")));
     mcusterItem->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("退水")));
 
@@ -34,10 +35,10 @@ MainWindow::MainWindow(QWidget *parent) :
     mRsultTAbleView->setMouseTracking(true);
     mRsultTAbleView->setModel(mcusterItem);
     mRsultTAbleView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    mRsultTAbleView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+//    mRsultTAbleView->setEditTriggers(QAbstractItemView::AllEditTriggers);
     mRsultTAbleView->setSortingEnabled(true);
-//    mRsultTAbleView->resizeRowsToContents();
-//    mRsultTAbleView->resizeColumnsToContents();
+
+  //  mRsultTAbleView->setItemDelegateForColumn(3, NULL);
 
 }
 
@@ -156,17 +157,16 @@ void MainWindow::detectPlatFrom(QString &text)
             }
         }
     }
-    qDebug() << "detect platform : " << mCurrentPlatform ;
+    qDebug() << "detect platform : " << mCurrentPlatform <<endl;
 }
 
 void MainWindow::progress()
 {
 //    qDebug("..on progress");
-//    mcusterItem->clear();
     mCusterList.clear();
     mTotlePayback = 0;
     QString text = ui->plainsrcTextEdit->toPlainText();
-   detectPlatFrom(text);
+    detectPlatFrom(text);
 
     QTextStream str(&text, QIODevice::ReadOnly);
     QString line;
@@ -180,7 +180,7 @@ void MainWindow::progress()
         }
     }
 
-    ui->label_time->setText(mTableTime);
+
     for (int i = 0; i < mCusterList.size(); i++)
     {
         mcusterItem->setItem(i, 0, new QStandardItem(mCusterList.at(i).name));
@@ -189,12 +189,35 @@ void MainWindow::progress()
         mcusterItem->setItem(i, 3, new QStandardItem(QString::number(mCusterList.at(i).winorlse)));
         mcusterItem->setItem(i, 4, new QStandardItem(QString::number(mCusterList.at(i).payback)));
     }
+
+    //title
+    mTableTime.clear();
+    mTableTime.append("|||||||平台: ");
+
+    if (mCurrentPlatform == PLATFORM_XINSHIJI){
+        mTableTime.append("新世纪");
+    }else if (mCurrentPlatform == PLATFORM_BAOXUAN){
+         mTableTime.append("宝轩");
+    }
+    mTableTime.append("   总退水: ");
+    //(intFloor(mTotlePayback)), 10
+    QString allPackback  = QString::number(intFloor(mTotlePayback), 10);
+    mTableTime.append(allPackback);
+    ui->label_time->setText(mTableTime);
 }
 
 void MainWindow::clear()
 {
+    for (int i = 0; i < mCusterList.length(); i++)
+    {
+        mcusterItem->removeRow(0);
+    }
+
     ui->plainsrcTextEdit->clear();
+    mTableTime.clear();
+    ui->label_time->setText(mTableTime);
     mCusterList.clear();
+    mTotlePayback = 0;
 }
 
 void MainWindow::fastPayback()
