@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QTableView>
 #include <QStandardItemModel>
+#include <QModelIndex>
+#include <QVector>
 namespace Ui {
 class MainWindow;
 }
@@ -52,10 +54,13 @@ private:
     int mCurrentPlatform;
     void detectPlatFrom(QString &str);
     double getLastNumFromString(QString str);
+    bool mHasInited;
+    void calSum();
 private slots:
     void progress();
     void clear();
     void fastPayback();
+    void refreshData(QStandardItem*);
 };
 
 #endif // MAINWINDOW_H

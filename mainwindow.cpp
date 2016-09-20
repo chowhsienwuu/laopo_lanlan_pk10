@@ -15,12 +15,14 @@ MainWindow::MainWindow(QWidget *parent) :
     mcusterItem = new QStandardItemModel();
     mTableTime = "";
     mCurrentPlatform = PLATFORM_UNKONW;
+    mHasInited = false;
     //mCurrentPlatform = PLATFORM_XINSHIJI;
     ui->setupUi(this);
     connect(ui->plainsrcTextEdit, SIGNAL(textChanged()), this, SLOT(progress()));
     connect(ui->clearButton, SIGNAL(pressed()), this, SLOT(clear()));
     connect(ui->fastpayback_src, SIGNAL(textChanged(QString)), this, SLOT(fastPayback()));
-
+    connect(mcusterItem, SIGNAL(itemChanged(QStandardItem*)), this,
+            SLOT(refreshData(QStandardItem*)));
     //    mcusterItem->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("序号")));
     mcusterItem->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("帐号")));
     mcusterItem->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("名称")));
@@ -195,6 +197,36 @@ double MainWindow::getLastNumFromString(QString rawString)
     return t_value.toDouble();
 }
 
+void MainWindow::calSum()
+{
+    mTableTime.clear();
+    mTableTime.append("|||||||平台: ");
+
+    if (mCurrentPlatform == PLATFORM_XINSHIJI){
+        mTableTime.append("新世纪");
+    }else if (mCurrentPlatform == PLATFORM_BAOXUAN){
+        mTableTime.append("宝轩");
+    }
+    mTableTime.append("   总退水: ");
+    //(intFloor(mTotlePayback)), 10
+    QString allPackback  = QString::number(intFloor(mTotlePayback), 10);
+    mTableTime.append(allPackback);
+    mTableTime.append("  昨天退水: ");
+    int t_paed = 0;
+    int t_paying = 0;
+    for (int i = 0; i < mCusterList.size(); i++){
+        QStandardItem *t_itempaed = mcusterItem->item(i, 4);
+        t_paed += t_itempaed->data(Qt::EditRole).toString().toInt();
+
+        QStandardItem *t_itempaying = mcusterItem->item(i, 5);
+        t_paying += t_itempaying->data(Qt::EditRole).toString().toInt();
+    }
+    mTableTime.append(QString::number(t_paed, 10));
+            mTableTime.append("  今天退水: ");
+    mTableTime.append(QString::number(t_paying, 10));
+            ui->label_info->setText(mTableTime);
+}
+
 void MainWindow::progress()
 {
 //    qDebug("..on progress");
@@ -223,22 +255,14 @@ void MainWindow::progress()
         mcusterItem->setItem(i, 3, new QStandardItem(QString::number(mCusterList.at(i).paybackInAll)));
         mcusterItem->setItem(i, 4, new QStandardItem(QString::number(mCusterList.at(i).playbackPaid)));
         mcusterItem->setItem(i, 5, new QStandardItem(QString::number(mCusterList.at(i).playbackPaying)));
+
+        mcusterItem->item(i, 0)->setEditable(false);
+//         mcusterItem->item(i, 0)->setEditable(false);
+          mcusterItem->item(i, 2)->setEditable(false);
     }
 
-    //title
-    mTableTime.clear();
-    mTableTime.append("|||||||平台: ");
-
-    if (mCurrentPlatform == PLATFORM_XINSHIJI){
-        mTableTime.append("新世纪");
-    }else if (mCurrentPlatform == PLATFORM_BAOXUAN){
-         mTableTime.append("宝轩");
-    }
-    mTableTime.append("   总退水: ");
-    //(intFloor(mTotlePayback)), 10
-    QString allPackback  = QString::number(intFloor(mTotlePayback), 10);
-    mTableTime.append(allPackback);
-    ui->label_info->setText(mTableTime);
+    mHasInited = true;
+    calSum();
 }
 
 void MainWindow::clear()
@@ -254,6 +278,7 @@ void MainWindow::clear()
 
     mCusterList.clear();
     mTotlePayback = 0;
+    mHasInited = false;
 }
 
 void MainWindow::fastPayback()
@@ -267,6 +292,31 @@ void MainWindow::fastPayback()
     QString show = "退水: " +   QString::number(palybak);
 
     ui->fastPaybacklable->setText(show);
+}
+
+void MainWindow::refreshData(QStandardItem* item)
+{
+    if (!mHasInited){
+        return; //system init table view just return;
+    }
+   // qDebug() << "refreshData" << item->row() <<  item->column() << item->data(Qt::EditRole).toString();
+    if (item->column() != 4 && item->column() != 1){
+        return; //just payed..
+    }
+
+    QStandardItem *t_item1 = mcusterItem->item(item->row(),  item->column() - 1);
+//    QString type =
+//            if (type.startsWith("d", Qt::CaseInsensitive)
+//                    || type.startsWith("c", Qt::CaseInsensitive))
+    double t_payInall = t_item1->data(Qt::EditRole).toString().toDouble();
+
+
+    double t_changePayed = item->data(Qt::EditRole).toString().toDouble();
+    double t_changePaying = t_payInall - t_changePayed;
+    t_changePaying = t_changePaying > 0L ? t_changePaying : 0L;
+   // qDebug() << "..chage to " << t_changePaying;
+    mcusterItem->setItem(item->row(), item->column() + 1, new QStandardItem(QString::number(intFloor(t_changePaying))));
+    calSum();
 }
 
 
