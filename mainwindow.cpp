@@ -25,9 +25,9 @@ MainWindow::MainWindow(QWidget *parent) :
     mcusterItem->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("帐号")));
     mcusterItem->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("名称")));
     mcusterItem->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("流水")));
-    mcusterItem->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("输赢")));
-    mcusterItem->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("退水")));
-
+    mcusterItem->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("总退水")));
+    mcusterItem->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("已退水")));
+    mcusterItem->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("应退水")));
 
     mRsultTAbleView = ui->tableView;
     mRsultTAbleView->setShowGrid(true);
@@ -37,7 +37,9 @@ MainWindow::MainWindow(QWidget *parent) :
 //    mRsultTAbleView->setEditTriggers(QAbstractItemView::AllEditTriggers);
     mRsultTAbleView->setSortingEnabled(true);
 
-    //setCentralWidget(ui->plainsrcTextEdit);
+    //setCentralWidget(ui->grid_root);
+//    setCentralWidget(ui->centralWidget);
+//    ui->centralWidget->setLayout(ui->gridLayout_3);
 }
 
 MainWindow::~MainWindow()
@@ -73,13 +75,18 @@ void MainWindow::processOneLineXinshiji(QString *line)
             if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
                     || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
             {
-                t_custerStruct.payback = intFloor(t_custerStruct.journal * journalpercet);
-                mTotlePayback += t_custerStruct.payback;
+                t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
+                mTotlePayback += t_custerStruct.paybackInAll;
             }else {
-                t_custerStruct.payback = 0;
+                t_custerStruct.paybackInAll = 0;
             }
 
-            mCusterList.append(t_custerStruct);
+            t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
+            t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
+
+            //if (t_custerStruct.paybackInAll){
+                mCusterList.append(t_custerStruct);
+            //}
         }
     }
 }
@@ -109,13 +116,18 @@ void MainWindow::processOneLinebaoxuan(QString *line)
             if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
                     || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
             {
-                t_custerStruct.payback = intFloor(t_custerStruct.journal * journalpercet);
-                mTotlePayback += t_custerStruct.payback;
+                t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
+                mTotlePayback += t_custerStruct.paybackInAll;
             }else {
-                t_custerStruct.payback = 0;
+                t_custerStruct.paybackInAll = 0;
             }
 
-            mCusterList.append(t_custerStruct);
+            t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
+            t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
+
+           // if (t_custerStruct.paybackInAll){
+                mCusterList.append(t_custerStruct);
+          //  }
         }
     }
 }
@@ -158,6 +170,31 @@ void MainWindow::detectPlatFrom(QString &text)
     qDebug() << "detect platform : " << mCurrentPlatform <<endl;
 }
 
+double MainWindow::getLastNumFromString(QString rawString)
+{
+    //qDebug() << "rawString: " << rawString;
+    if (!rawString.startsWith("d", Qt::CaseInsensitive)
+            && !rawString.startsWith("c", Qt::CaseInsensitive)
+            && !rawString.startsWith("a", Qt::CaseInsensitive)) {
+      //  qDebug() << "error rawString" ;
+        return 0;
+    }
+
+    int startPos = 0;
+    for(int i = rawString.size() - 1; i >= 0; i--){
+        QChar t_char = rawString.at(i);
+        if(!t_char.isDigit()){
+            startPos = i;
+            break;
+        }
+    };
+    startPos++;
+    QString t_value = rawString.remove(0, startPos);
+
+    //qDebug() <<  "." << t_value.toDouble();
+    return t_value.toDouble();
+}
+
 void MainWindow::progress()
 {
 //    qDebug("..on progress");
@@ -178,14 +215,14 @@ void MainWindow::progress()
         }
     }
 
-
     for (int i = 0; i < mCusterList.size(); i++)
     {
         mcusterItem->setItem(i, 0, new QStandardItem(mCusterList.at(i).name));
         mcusterItem->setItem(i, 1, new QStandardItem(mCusterList.at(i).type));
         mcusterItem->setItem(i, 2, new QStandardItem(QString::number(mCusterList.at(i).journal)));
-        mcusterItem->setItem(i, 3, new QStandardItem(QString::number(mCusterList.at(i).winorlse)));
-        mcusterItem->setItem(i, 4, new QStandardItem(QString::number(mCusterList.at(i).payback)));
+        mcusterItem->setItem(i, 3, new QStandardItem(QString::number(mCusterList.at(i).paybackInAll)));
+        mcusterItem->setItem(i, 4, new QStandardItem(QString::number(mCusterList.at(i).playbackPaid)));
+        mcusterItem->setItem(i, 5, new QStandardItem(QString::number(mCusterList.at(i).playbackPaying)));
     }
 
     //title
@@ -201,7 +238,7 @@ void MainWindow::progress()
     //(intFloor(mTotlePayback)), 10
     QString allPackback  = QString::number(intFloor(mTotlePayback), 10);
     mTableTime.append(allPackback);
-    ui->label_time->setText(mTableTime);
+    ui->label_info->setText(mTableTime);
 }
 
 void MainWindow::clear()
@@ -213,7 +250,8 @@ void MainWindow::clear()
 
     ui->plainsrcTextEdit->clear();
     mTableTime.clear();
-    ui->label_time->setText(mTableTime);
+    ui->label_info->setText(mTableTime);
+
     mCusterList.clear();
     mTotlePayback = 0;
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1147</width>
-    <height>730</height>
+    <width>1325</width>
+    <height>777</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>440</x>
       <y>40</y>
-      <width>681</width>
-      <height>531</height>
+      <width>841</width>
+      <height>551</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -49,7 +49,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="label_time">
+   <widget class="QLabel" name="label_info">
     <property name="geometry">
      <rect>
       <x>420</x>
@@ -91,8 +91,8 @@
    <widget class="QLineEdit" name="fastpayback_src">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>630</y>
+      <x>460</x>
+      <y>650</y>
       <width>221</width>
       <height>31</height>
      </rect>
@@ -101,8 +101,8 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>451</x>
-      <y>600</y>
+      <x>461</x>
+      <y>620</y>
       <width>191</width>
       <height>20</height>
      </rect>
@@ -114,8 +114,8 @@
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>590</y>
+      <x>430</x>
+      <y>610</y>
       <width>581</width>
       <height>20</height>
      </rect>
@@ -127,8 +127,8 @@
    <widget class="Line" name="line_2">
     <property name="geometry">
      <rect>
-      <x>413</x>
-      <y>600</y>
+      <x>423</x>
+      <y>620</y>
       <width>20</width>
       <height>71</height>
      </rect>
@@ -140,8 +140,8 @@
    <widget class="QLabel" name="fastPaybacklable">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>620</y>
+      <x>700</x>
+      <y>640</y>
       <width>331</width>
       <height>41</height>
      </rect>
@@ -159,7 +159,7 @@
     </property>
    </widget>
    <zorder>plainsrcTextEdit</zorder>
-   <zorder>label_time</zorder>
+   <zorder>label_info</zorder>
    <zorder>label</zorder>
    <zorder>clearButton</zorder>
    <zorder>fastpayback_src</zorder>
@@ -174,8 +174,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1147</width>
-     <height>23</height>
+     <width>1325</width>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

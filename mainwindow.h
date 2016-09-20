@@ -32,7 +32,9 @@ private:
         QString type;
         double journal; //
         double winorlse;
-        int payback;
+        int paybackInAll;
+        int playbackPaid;
+        int playbackPaying;
     }T_custerStruct;
 
     QList<T_custerStruct> mCusterList;
@@ -49,6 +51,7 @@ private:
     const int PLATFORM_BAOXUAN  = 0x02;
     int mCurrentPlatform;
     void detectPlatFrom(QString &str);
+    double getLastNumFromString(QString str);
 private slots:
     void progress();
     void clear();
