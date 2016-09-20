@@ -2,6 +2,15 @@
 #define TEXTEXAMPLES
 #if 0
 //新世纪.
+
+QGridLayout(QWidget * parent)
+QGridLayout()
+~QGridLayout()
+void	addItem(QLayoutItem * item, int row, int column, int rowSpan = 1, int columnSpan = 1, Qt::Alignment alignment = 0)
+void	addLayout(QLayout * layout, int row, int column, Qt::Alignment alignment = 0)
+void	addLayout(QLayout * layout, int row, int column, int rowSpan, int columnSpan, Qt::Alignment alignment = 0)
+void	addWidget(QWidget * widget, int row, int column, Qt::Alignment alignment = 0)
+void	addWidget(QWidget * widget, int fromRow, int fromColumn, int rowSpan, int columnSpan, Qt::Alignment alignment = 0)
 name       type journal winorlost001 winorlost002
 会员	a0062	a	161	2,565.0	2,565.0	-199.8	0.0	-199.8	-199.8	0%	0.0	0.0	0.0	10.3	10.3	2,565.0	-189.5
 会员	a0116	a	21	580.0	580.0	513.2	0.0	513.2	513.2	0%	0.0	0.0	0.0	2.3	2.3	580.0	515.5

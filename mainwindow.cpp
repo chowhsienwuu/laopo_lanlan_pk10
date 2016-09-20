@@ -37,8 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    mRsultTAbleView->setEditTriggers(QAbstractItemView::AllEditTriggers);
     mRsultTAbleView->setSortingEnabled(true);
 
-  //  mRsultTAbleView->setItemDelegateForColumn(3, NULL);
-
+    //setCentralWidget(ui->plainsrcTextEdit);
 }
 
 MainWindow::~MainWindow()
