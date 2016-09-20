@@ -17,7 +17,6 @@ MainWindow::MainWindow(QWidget *parent) :
     mCurrentPlatform = PLATFORM_UNKONW;
     //mCurrentPlatform = PLATFORM_XINSHIJI;
     ui->setupUi(this);
-    connect(ui->okButton, SIGNAL(pressed()), this, SLOT(progress()));
     connect(ui->plainsrcTextEdit, SIGNAL(textChanged()), this, SLOT(progress()));
     connect(ui->clearButton, SIGNAL(pressed()), this, SLOT(clear()));
     connect(ui->fastpayback_src, SIGNAL(textChanged(QString)), this, SLOT(fastPayback()));
