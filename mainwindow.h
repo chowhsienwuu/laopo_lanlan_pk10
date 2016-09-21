@@ -24,6 +24,8 @@ private:
     QStandardItemModel *mcusterItem ;
     void processOneLineXinshiji(QString *line);
     void processOneLinebaoxuan(QString *line);
+    void processOneLinenanshengbaoxuan(QString *line);
+    void processOneLineali(QString *line);
 
     QString mTableTime;
     double mTotlePayback;
@@ -51,6 +53,8 @@ private:
     const int PLATFORM_UNKONW = 0X0;
     const int PLATFORM_XINSHIJI = 0x01;
     const int PLATFORM_BAOXUAN  = 0x02;
+    const int PLATFORM_NANSHENGBAOXUAN = 0X03;
+    const int PLATFORM_ALI = 0x04;
     int mCurrentPlatform;
     void detectPlatFrom(QString &str);
     double getLastNumFromString(QString str);
@@ -59,7 +63,8 @@ private:
 private slots:
     void progress();
     void clear();
-    void fastPayback();
+    void fastPayback022();
+    void fastPayback024();
     void refreshData(QStandardItem*);
 };
 

@@ -10,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    journalpercet = 0.024;
     mTotlePayback = 0;
     mcusterItem = new QStandardItemModel();
     mTableTime = "";
@@ -22,7 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->plainsrcTextEdit, SIGNAL(textChanged()), this, SLOT(progress()));
     connect(ui->clearButton, SIGNAL(pressed()), this, SLOT(clear()));
-    connect(ui->fastpayback_src, SIGNAL(textChanged(QString)), this, SLOT(fastPayback()));
+    connect(ui->fastpayback_src, SIGNAL(textChanged(QString)), this, SLOT(fastPayback022()));
+     connect(ui->fastpayback_src_2, SIGNAL(textChanged(QString)), this, SLOT(fastPayback024()));
     connect(mcusterItem, SIGNAL(itemChanged(QStandardItem*)), this,
             SLOT(refreshData(QStandardItem*)));
     //    mcusterItem->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("序号")));
@@ -136,6 +136,88 @@ void MainWindow::processOneLinebaoxuan(QString *line)
     }
 }
 
+void MainWindow::processOneLinenanshengbaoxuan(QString *line)
+{
+    // ya22266	A六六六	36	10089.0	1052.6	1052.6	0.000	0	0.00	0	0	0	-60.5	-60.5	10089.0	1113.2
+    QStringList stringlist =  line->split(QRegularExpression("\\s+"));
+    QString t_str;
+//    qDebug() << line << stringlist.length()  << " nanshengbaoxuan" ;
+    if (stringlist.length() == 16)
+    {
+        T_custerStruct t_custerStruct;
+        t_custerStruct.type = stringlist.at(1);
+        if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
+                || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+        {
+            t_custerStruct.name = stringlist.at(0);
+
+            t_str = stringlist.at(3);
+            t_str = t_str.remove(QChar(','));
+            t_custerStruct.journal = t_str.toDouble();
+
+            t_str = stringlist.at(4);
+            t_str = t_str.remove(QChar(','));
+            t_custerStruct.winorlse = t_str.toDouble();
+
+            if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
+                    || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+            {
+                t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
+                mTotlePayback += t_custerStruct.paybackInAll;
+            }else {
+                t_custerStruct.paybackInAll = 0;
+            }
+
+            t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
+            t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
+
+           // if (t_custerStruct.paybackInAll){
+                mCusterList.append(t_custerStruct);
+          //  }
+        }
+    }
+}
+
+void MainWindow::processOneLineali(QString *line)
+{
+    QStringList stringlist =  line->split(QRegularExpression("\\s+"));
+    QString t_str;
+    if (stringlist.length() == 16)
+    {
+        T_custerStruct t_custerStruct;
+        t_custerStruct.type = stringlist.at(1);
+        if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
+                || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+        {
+            t_custerStruct.name = stringlist.at(0);
+
+            t_str = stringlist.at(3);
+            t_str = t_str.remove(QChar(','));
+            t_custerStruct.journal = t_str.toDouble();
+
+            t_str = stringlist.at(4);
+            t_str = t_str.remove(QChar(','));
+            t_custerStruct.winorlse = t_str.toDouble(); //170.7
+
+            if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
+                    || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+            {
+                t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
+                mTotlePayback += t_custerStruct.paybackInAll;
+            }else {
+                t_custerStruct.paybackInAll = 0;
+            }
+
+            t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
+            t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
+
+           // if (t_custerStruct.paybackInAll){
+                mCusterList.append(t_custerStruct);
+          //  }
+        }
+    }
+}
+
 int MainWindow::intFloor(double in)
 {
     return (int)floor(in);
@@ -148,7 +230,14 @@ void MainWindow::detectPlatFrom(QString &text)
     while(!str.atEnd())
     {
         line = str.readLine();
+       // qDebug() << line << " " << line.isEmpty();
+        if (line.length() > 10){
+            while (line.at(0).isSpace() && line.length() > 2){
+                line.remove(0, 1);
+            }
+        }
         QStringList stringlist =  line.split(QRegularExpression("\\s+"));
+        //qDebug() << "detectPlatFrom line" << stringlist.length();
         QString t_str;
         if(stringlist.length() == 13){
             t_str = stringlist.at(1);
@@ -170,8 +259,34 @@ void MainWindow::detectPlatFrom(QString &text)
                 break;
             }
         }
+        //nanshen baoxuan ali
+        QString t_str06;
+        if(stringlist.length() == 16){
+            t_str = stringlist.at(1);
+            t_str06 = stringlist.at(6);
+            if (t_str.startsWith("d", Qt::CaseInsensitive)
+                    || t_str.startsWith("c", Qt::CaseInsensitive)
+                    || t_str.startsWith("a", Qt::CaseInsensitive))
+            {
+               qDebug()<< "the t_str06 " << t_str06 ;
+                if (t_str06.endsWith("%", Qt::CaseInsensitive)){
+                    mCurrentPlatform = PLATFORM_ALI;
+                    break;
+                }else{
+                    mCurrentPlatform = PLATFORM_NANSHENGBAOXUAN;
+                    break;
+                }
+            }
+        }
     }
-    qDebug() << "detect platform : " << mCurrentPlatform <<endl;
+    if (mCurrentPlatform == PLATFORM_NANSHENGBAOXUAN || mCurrentPlatform == PLATFORM_XINSHIJI ||
+            mCurrentPlatform == PLATFORM_BAOXUAN ){
+        journalpercet = 0.024;
+    }else if (mCurrentPlatform == PLATFORM_ALI){
+        journalpercet = 0.022;
+    }
+
+    qDebug() << "detect platform : " << mCurrentPlatform << " journalpercet : " << journalpercet << endl;
 }
 
 double MainWindow::getLastNumFromString(QString rawString)
@@ -202,14 +317,20 @@ double MainWindow::getLastNumFromString(QString rawString)
 void MainWindow::calSum()
 {
     mTableTime.clear();
-    mTableTime.append("|||||||平台: ");
+    mTableTime.append(" *平台: ");
 
     if (mCurrentPlatform == PLATFORM_XINSHIJI){
         mTableTime.append("新世纪");
     }else if (mCurrentPlatform == PLATFORM_BAOXUAN){
         mTableTime.append("宝轩");
+    }else if (mCurrentPlatform == PLATFORM_NANSHENGBAOXUAN){
+         mTableTime.append("宝轩/南升");
+    }else if (mCurrentPlatform == PLATFORM_ALI){
+        mTableTime.append("阿里");
     }
-    mTableTime.append("   总退水: ");
+    mTableTime.append(" 退水比例: ");
+    mTableTime.append(QString::number(journalpercet));
+    mTableTime.append(" 总退水: ");
     //(intFloor(mTotlePayback)), 10
     QString allPackback  = QString::number(intFloor(mTotlePayback), 10);
     mTableTime.append(allPackback);
@@ -242,10 +363,22 @@ void MainWindow::progress()
     while(!str.atEnd())
     {
         line = str.readLine();
+        //qDebug() << line << "befor" ;
+        if (line.length() > 10){
+            while (line.at(0).isSpace() && line.length() > 2){
+                line.remove(0, 1);
+            }
+        }
+         //  qDebug() << line << "end" ;
         if (mCurrentPlatform == PLATFORM_XINSHIJI){
             processOneLineXinshiji(&line);
         }else if (mCurrentPlatform == PLATFORM_BAOXUAN){
             processOneLinebaoxuan(&line);
+        }else if (mCurrentPlatform == PLATFORM_NANSHENGBAOXUAN){
+            processOneLinenanshengbaoxuan(&line);
+        }else if (mCurrentPlatform == PLATFORM_ALI){
+            //   qDebug() << line << "in" ;
+            processOneLineali(&line);
         }
     }
 
@@ -262,7 +395,6 @@ void MainWindow::progress()
 //         mcusterItem->item(i, 0)->setEditable(false);
           mcusterItem->item(i, 2)->setEditable(false);
     }
-
     mHasInited = true;
     calSum();
 }
@@ -281,20 +413,36 @@ void MainWindow::clear()
     mCusterList.clear();
     mTotlePayback = 0;
     mHasInited = false;
+    journalpercet = 0;
+    mCurrentPlatform = PLATFORM_UNKONW;
 }
 
-void MainWindow::fastPayback()
+void MainWindow::fastPayback022()
 {
     QString t_str = ui->fastpayback_src->text();
 
     t_str = t_str.remove(QChar(','));
     double journal = t_str.toDouble(); //
-    journal *= journalpercet;
+    journal *= 0.022;
     int palybak = intFloor(journal);
     QString show = "退水: " +   QString::number(palybak);
 
     ui->fastPaybacklable->setText(show);
 }
+
+void MainWindow::fastPayback024()
+{
+    QString t_str = ui->fastpayback_src_2->text();
+
+    t_str = t_str.remove(QChar(','));
+    double journal = t_str.toDouble(); //
+    journal *= 0.024;
+    int palybak = intFloor(journal);
+    QString show = "退水: " +   QString::number(palybak);
+
+    ui->fastPaybacklable_2->setText(show);
+}
+
 
 void MainWindow::refreshData(QStandardItem* item)
 {
@@ -311,7 +459,6 @@ void MainWindow::refreshData(QStandardItem* item)
 //            if (type.startsWith("d", Qt::CaseInsensitive)
 //                    || type.startsWith("c", Qt::CaseInsensitive))
     double t_payInall = t_item1->data(Qt::EditRole).toString().toDouble();
-
 
     double t_changePayed = item->data(Qt::EditRole).toString().toDouble();
     double t_changePaying = t_payInall - t_changePayed;
