@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     mTotlePayback = 0;
+    journalpercet = 0;
     mcusterItem = new QStandardItemModel();
     mTableTime = "";
     mCurrentPlatform = PLATFORM_UNKONW;

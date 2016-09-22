@@ -296,7 +296,7 @@
               </font>
              </property>
              <property name="text">
-              <string/>
+              <string>退水:</string>
              </property>
             </widget>
            </item>
@@ -362,7 +362,7 @@
               </font>
              </property>
              <property name="text">
-              <string/>
+              <string>退水:</string>
              </property>
             </widget>
            </item>
