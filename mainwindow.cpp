@@ -60,7 +60,7 @@ void MainWindow::processOneLineXinshiji(QString *line)
     }
     QStringList stringlist =  line->split(QRegularExpression("\\s+"));
     QString t_str;
-    if (stringlist.length() == 18)
+    if (stringlist.length() > 10)
     {
         T_custerStruct t_custerStruct;
         t_custerStruct.type = stringlist.at(2);
@@ -101,7 +101,7 @@ void MainWindow::processOneLinebaoxuan(QString *line)
     // yaofa168	c	27	111.0	-91.6	111.0	91.6	0.000	 	0.00	3.1	3.1	111.0	88.5
     QStringList stringlist =  line->split(QRegularExpression("\\s+"));
     QString t_str;
-    if (stringlist.length() == 13)
+    if (stringlist.length() > 10)
     {
         T_custerStruct t_custerStruct;
         t_custerStruct.type = stringlist.at(1);
@@ -130,9 +130,9 @@ void MainWindow::processOneLinebaoxuan(QString *line)
             t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
             t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
 
-           // if (t_custerStruct.paybackInAll){
+            if (t_custerStruct.paybackInAll){
                 mCusterList.append(t_custerStruct);
-          //  }
+            }
         }
     }
 }
@@ -143,7 +143,7 @@ void MainWindow::processOneLinenanshengbaoxuan(QString *line)
     QStringList stringlist =  line->split(QRegularExpression("\\s+"));
     QString t_str;
 //    qDebug() << line << stringlist.length()  << " nanshengbaoxuan" ;
-    if (stringlist.length() == 16)
+    if (stringlist.length() > 10)
     {
         T_custerStruct t_custerStruct;
         t_custerStruct.type = stringlist.at(1);
@@ -172,9 +172,9 @@ void MainWindow::processOneLinenanshengbaoxuan(QString *line)
             t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
             t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
 
-           // if (t_custerStruct.paybackInAll){
+            if (t_custerStruct.paybackInAll){
                 mCusterList.append(t_custerStruct);
-          //  }
+            }
         }
     }
 }
@@ -183,7 +183,8 @@ void MainWindow::processOneLineali(QString *line)
 {
     QStringList stringlist =  line->split(QRegularExpression("\\s+"));
     QString t_str;
-    if (stringlist.length() == 16)
+    qDebug() << "ali " << stringlist.length() ;
+    if (stringlist.length() > 10)
     {
         T_custerStruct t_custerStruct;
         t_custerStruct.type = stringlist.at(1);
@@ -212,9 +213,9 @@ void MainWindow::processOneLineali(QString *line)
             t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
             t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
 
-           // if (t_custerStruct.paybackInAll){
+            if (t_custerStruct.paybackInAll){
                 mCusterList.append(t_custerStruct);
-          //  }
+            }
         }
     }
 }
@@ -238,7 +239,7 @@ void MainWindow::detectPlatFrom(QString &text)
             }
         }
         QStringList stringlist =  line.split(QRegularExpression("\\s+"));
-        //qDebug() << "detectPlatFrom line" << stringlist.length();
+       // qDebug() << "detectPlatFrom line" << stringlist.length();
         QString t_str;
         if(stringlist.length() == 13){
             t_str = stringlist.at(1);
@@ -262,14 +263,14 @@ void MainWindow::detectPlatFrom(QString &text)
         }
         //nanshen baoxuan ali
         QString t_str06;
-        if(stringlist.length() == 16){
+        if(stringlist.length() == 16 || stringlist.length() == 17){
             t_str = stringlist.at(1);
             t_str06 = stringlist.at(6);
             if (t_str.startsWith("d", Qt::CaseInsensitive)
                     || t_str.startsWith("c", Qt::CaseInsensitive)
                     || t_str.startsWith("a", Qt::CaseInsensitive))
             {
-               qDebug()<< "the t_str06 " << t_str06 ;
+              // qDebug()<< "the t_str06 " << t_str06 ;
                 if (t_str06.endsWith("%", Qt::CaseInsensitive)){
                     mCurrentPlatform = PLATFORM_ALI;
                     break;
@@ -370,7 +371,8 @@ void MainWindow::progress()
                 line.remove(0, 1);
             }
         }
-         //  qDebug() << line << "end" ;
+        line = line.trimmed();
+         // qDebug() << line << "end" ;
         if (mCurrentPlatform == PLATFORM_XINSHIJI){
             processOneLineXinshiji(&line);
         }else if (mCurrentPlatform == PLATFORM_BAOXUAN){
@@ -378,7 +380,7 @@ void MainWindow::progress()
         }else if (mCurrentPlatform == PLATFORM_NANSHENGBAOXUAN){
             processOneLinenanshengbaoxuan(&line);
         }else if (mCurrentPlatform == PLATFORM_ALI){
-            //   qDebug() << line << "in" ;
+          //   qDebug() << line << "in" ;
             processOneLineali(&line);
         }
     }
