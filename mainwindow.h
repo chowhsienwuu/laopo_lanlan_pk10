@@ -26,7 +26,7 @@ private:
     void processOneLinebaoxuan(QString *line);
     void processOneLinenanshengbaoxuan(QString *line);
     void processOneLineali(QString *line);
-
+    void processOneLinecalSum(QString *line);
     QString mTableTime;
     double mTotlePayback;
 
@@ -55,6 +55,7 @@ private:
     const int PLATFORM_BAOXUAN  = 0x02;
     const int PLATFORM_NANSHENGBAOXUAN = 0X03;
     const int PLATFORM_ALI = 0x04;
+    const int PLATFORM_CALSUM = 0X5;
     int mCurrentPlatform;
     void detectPlatFrom(QString &str);
     double getLastNumFromString(QString str);

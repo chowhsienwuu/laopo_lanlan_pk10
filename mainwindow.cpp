@@ -16,7 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
     mTableTime = "";
     mCurrentPlatform = PLATFORM_UNKONW;
     mHasInited = false;
-    //mCurrentPlatform = PLATFORM_XINSHIJI;
     ui->setupUi(this);
     ui->centralWidget->setLayout(ui->verticalLayout_3);
 
@@ -26,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent) :
      connect(ui->fastpayback_src_2, SIGNAL(textChanged(QString)), this, SLOT(fastPayback024()));
     connect(mcusterItem, SIGNAL(itemChanged(QStandardItem*)), this,
             SLOT(refreshData(QStandardItem*)));
-    //    mcusterItem->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("序号")));
     mcusterItem->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("帐号")));
     mcusterItem->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("名称")));
     mcusterItem->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("流水")));
@@ -39,12 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mRsultTAbleView->setMouseTracking(true);
     mRsultTAbleView->setModel(mcusterItem);
     mRsultTAbleView->setSelectionBehavior(QAbstractItemView::SelectRows);
-//    mRsultTAbleView->setEditTriggers(QAbstractItemView::AllEditTriggers);
     mRsultTAbleView->setSortingEnabled(true);
-
-    //setCentralWidget(ui->grid_root);
-//    setCentralWidget(ui->centralWidget);
-//    ui->centralWidget->setLayout(ui->gridLayout_3);
 }
 
 MainWindow::~MainWindow()
@@ -183,7 +176,7 @@ void MainWindow::processOneLineali(QString *line)
 {
     QStringList stringlist =  line->split(QRegularExpression("\\s+"));
     QString t_str;
-    qDebug() << "ali " << stringlist.length() ;
+    //qDebug() << "ali " << stringlist.length() ;
     if (stringlist.length() > 10)
     {
         T_custerStruct t_custerStruct;
@@ -220,6 +213,32 @@ void MainWindow::processOneLineali(QString *line)
     }
 }
 
+void MainWindow::processOneLinecalSum(QString *line)
+{
+
+    QStringList stringlist =  line->split(QRegularExpression("\\s+"));
+    QString t_str;
+   // qDebug() << " processOneLinecalSum" << *line << stringlist.length();
+    if (stringlist.length() < 10 && stringlist.length() > 7)
+    {
+        T_custerStruct t_custerStruct;
+        t_custerStruct.paybackInAll = 0;
+        t_custerStruct.playbackPaid = 0;
+        t_custerStruct.playbackPaying = 0;
+        t_custerStruct.name = stringlist.at(2);
+
+        t_str = stringlist.at(4);
+        t_str = t_str.remove(QChar(','));
+        t_custerStruct.journal = t_str.toDouble();
+
+        t_custerStruct.journal = intFloor(t_custerStruct.journal);
+        mTotlePayback += t_custerStruct.journal;
+        if (t_custerStruct.journal){
+            mCusterList.append(t_custerStruct);
+        }
+    }
+}
+
 int MainWindow::intFloor(double in)
 {
     return (int)floor(in);
@@ -232,7 +251,7 @@ void MainWindow::detectPlatFrom(QString &text)
     while(!str.atEnd())
     {
         line = str.readLine();
-       // qDebug() << line << " " << line.isEmpty();
+     //   qDebug() << line << " " << line.isEmpty();
         if (line.length() > 10){
             while (line.at(0).isSpace() && line.length() > 2){
                 line.remove(0, 1);
@@ -280,12 +299,26 @@ void MainWindow::detectPlatFrom(QString &text)
                 }
             }
         }
+        //CAL SUM ONLY.
+        if(stringlist.length() == 10 || stringlist.length() == 9){
+            t_str = stringlist.at(3);
+            if (t_str.startsWith("d", Qt::CaseInsensitive)
+                    || t_str.startsWith("c", Qt::CaseInsensitive)
+                    || t_str.startsWith("a", Qt::CaseInsensitive))
+            {
+                mCurrentPlatform = PLATFORM_CALSUM;
+                break;
+            }
+        }
+
     }
     if (mCurrentPlatform == PLATFORM_NANSHENGBAOXUAN || mCurrentPlatform == PLATFORM_XINSHIJI ||
             mCurrentPlatform == PLATFORM_BAOXUAN ){
         journalpercet = 0.024;
     }else if (mCurrentPlatform == PLATFORM_ALI){
         journalpercet = 0.022;
+    }else if (mCurrentPlatform == PLATFORM_CALSUM){
+        journalpercet = 0.;
     }
 
     qDebug() << "detect platform : " << mCurrentPlatform << " journalpercet : " << journalpercet << endl;
@@ -333,7 +366,6 @@ void MainWindow::calSum()
     mTableTime.append(" 退水比例: ");
     mTableTime.append(QString::number(journalpercet));
     mTableTime.append(" 总退水: ");
-    //(intFloor(mTotlePayback)), 10
     QString allPackback  = QString::number(intFloor(mTotlePayback), 10);
     mTableTime.append(allPackback);
     mTableTime.append("  昨天退水: ");
@@ -349,7 +381,14 @@ void MainWindow::calSum()
     mTableTime.append(QString::number(t_paed, 10));
             mTableTime.append("  今天退水: ");
     mTableTime.append(QString::number(t_paying, 10));
-            ui->label_info->setText(mTableTime);
+
+    if (mCurrentPlatform == PLATFORM_CALSUM){
+        mTableTime.clear();
+        mTableTime.append("总数  :");
+        mTableTime.append(QString::number(intFloor(mTotlePayback), 10));
+    }
+
+    ui->label_info->setText(mTableTime);
 }
 
 void MainWindow::progress()
@@ -382,6 +421,8 @@ void MainWindow::progress()
         }else if (mCurrentPlatform == PLATFORM_ALI){
           //   qDebug() << line << "in" ;
             processOneLineali(&line);
+        }else if (mCurrentPlatform == PLATFORM_CALSUM){
+            processOneLinecalSum(&line);
         }
     }
 
@@ -452,15 +493,13 @@ void MainWindow::refreshData(QStandardItem* item)
     if (!mHasInited){
         return; //system init table view just return;
     }
-   // qDebug() << "refreshData" << item->row() <<  item->column() << item->data(Qt::EditRole).toString();
+
     if (item->column() != 4 && item->column() != 1){
         return; //just payed..
     }
 
     QStandardItem *t_item1 = mcusterItem->item(item->row(),  item->column() - 1);
-//    QString type =
-//            if (type.startsWith("d", Qt::CaseInsensitive)
-//                    || type.startsWith("c", Qt::CaseInsensitive))
+
     double t_payInall = t_item1->data(Qt::EditRole).toString().toDouble();
 
     double t_changePayed = item->data(Qt::EditRole).toString().toDouble();
