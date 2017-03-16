@@ -27,6 +27,8 @@ private:
     void processOneLinenanshengbaoxuan(QString *line);
     void processOneLineali(QString *line);
     void processOneLinecalSum(QString *line);
+    void processOneLinetianheguoji(QString *line);
+
     QString mTableTime;
     double mTotlePayback;
 
@@ -47,7 +49,7 @@ private:
     double journalpercet;
 
     int intFloor(double in);
-
+    void initCusterStruct(T_custerStruct *cus);
     //platfrom.
 
     const int PLATFORM_UNKONW = 0X0;
@@ -56,6 +58,8 @@ private:
     const int PLATFORM_NANSHENGBAOXUAN = 0X03;
     const int PLATFORM_ALI = 0x04;
     const int PLATFORM_CALSUM = 0X5;
+    const int PLATFORM_TIANHEGUOJI = 0x6;
+
     int mCurrentPlatform;
     void detectPlatFrom(QString &str);
     double getLastNumFromString(QString str);

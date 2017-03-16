@@ -56,6 +56,7 @@ void MainWindow::processOneLineXinshiji(QString *line)
     if (stringlist.length() > 10)
     {
         T_custerStruct t_custerStruct;
+        initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(2);
         if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
                 || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
@@ -97,6 +98,7 @@ void MainWindow::processOneLinebaoxuan(QString *line)
     if (stringlist.length() > 10)
     {
         T_custerStruct t_custerStruct;
+        initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
         if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
                 || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
@@ -139,6 +141,7 @@ void MainWindow::processOneLinenanshengbaoxuan(QString *line)
     if (stringlist.length() > 10)
     {
         T_custerStruct t_custerStruct;
+        initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
         if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
                 || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
@@ -180,6 +183,7 @@ void MainWindow::processOneLineali(QString *line)
     if (stringlist.length() > 10)
     {
         T_custerStruct t_custerStruct;
+        initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
         if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
                 || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
@@ -213,6 +217,52 @@ void MainWindow::processOneLineali(QString *line)
     }
 }
 
+void MainWindow::initCusterStruct(T_custerStruct *cus)
+{
+    if (cus == NULL){
+        return;
+    }
+    cus->index = 0;
+    cus->journal = 0;
+    cus->name = "";
+    cus->paybackInAll = 0;
+    cus->playbackPaid = 0;
+    cus->playbackPaying = 0;
+    cus->type = "";
+    cus->winorlse = 0;
+}
+
+void MainWindow::processOneLinetianheguoji(QString *line)
+{
+    QStringList stringlist =  line->split(QRegularExpression("\\s+"));
+    QString t_str;
+    //qDebug() << "ali " << stringlist.length() ;
+    if (stringlist.length() > 10)
+    {
+        T_custerStruct t_custerStruct;
+        initCusterStruct(&t_custerStruct);
+        t_custerStruct.type = stringlist.at(2);
+        if (t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+        {
+            t_custerStruct.name = stringlist.at(0);
+            t_str = stringlist.at(4);
+            t_str = t_str.remove(QChar(','));
+            t_custerStruct.journal = t_str.toDouble();
+
+            if (t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+            {
+                t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
+                mTotlePayback += t_custerStruct.paybackInAll;
+            }else {
+                t_custerStruct.paybackInAll = 0;
+            }
+
+            if (t_custerStruct.paybackInAll){
+                mCusterList.append(t_custerStruct);
+            }
+        }
+    }
+}
 void MainWindow::processOneLinecalSum(QString *line)
 {
 
@@ -222,6 +272,7 @@ void MainWindow::processOneLinecalSum(QString *line)
     if (stringlist.length() < 10 && stringlist.length() > 7)
     {
         T_custerStruct t_custerStruct;
+        initCusterStruct(&t_custerStruct);
         t_custerStruct.paybackInAll = 0;
         t_custerStruct.playbackPaid = 0;
         t_custerStruct.playbackPaying = 0;
@@ -260,6 +311,21 @@ void MainWindow::detectPlatFrom(QString &text)
         QStringList stringlist =  line.split(QRegularExpression("\\s+"));
        // qDebug() << "detectPlatFrom line" << stringlist.length();
         QString t_str;
+
+        //tianheguoji
+        if(stringlist.length() > 15){
+            t_str = stringlist.at(2);
+            QString temp = stringlist.at(1);
+            if ((t_str.startsWith("d", Qt::CaseInsensitive)
+                    || t_str.startsWith("c", Qt::CaseInsensitive)
+                    || t_str.startsWith("a", Qt::CaseInsensitive))
+                    && temp.contains("直属会员"))
+            {
+                mCurrentPlatform = PLATFORM_TIANHEGUOJI;
+                break;
+            }
+        }
+
         if(stringlist.length() == 13){
             t_str = stringlist.at(1);
             if (t_str.startsWith("d", Qt::CaseInsensitive)
@@ -315,7 +381,7 @@ void MainWindow::detectPlatFrom(QString &text)
     if (mCurrentPlatform == PLATFORM_NANSHENGBAOXUAN || mCurrentPlatform == PLATFORM_XINSHIJI ||
             mCurrentPlatform == PLATFORM_BAOXUAN ){
         journalpercet = 0.024;
-    }else if (mCurrentPlatform == PLATFORM_ALI){
+    }else if (mCurrentPlatform == PLATFORM_ALI || mCurrentPlatform == PLATFORM_TIANHEGUOJI){
         journalpercet = 0.022;
     }else if (mCurrentPlatform == PLATFORM_CALSUM){
         journalpercet = 0.;
@@ -362,7 +428,10 @@ void MainWindow::calSum()
          mTableTime.append("宝轩/南升");
     }else if (mCurrentPlatform == PLATFORM_ALI){
         mTableTime.append("阿里");
+    }else if (mCurrentPlatform == PLATFORM_TIANHEGUOJI){
+        mTableTime.append("天和国际");
     }
+
     mTableTime.append(" 退水比例: ");
     mTableTime.append(QString::number(journalpercet));
     mTableTime.append(" 总退水: ");
@@ -393,9 +462,21 @@ void MainWindow::calSum()
 
 void MainWindow::progress()
 {
-//    qDebug("..on progress");
+//    qDebug("..on progress");  
+    //
+    for (int i = 0; i < mCusterList.length(); i++)
+    {
+        mcusterItem->removeRow(0);
+    }
+    mTableTime.clear();
+    ui->label_info->setText(mTableTime);
+
     mCusterList.clear();
     mTotlePayback = 0;
+    mHasInited = false;
+    journalpercet = 0;
+    mCurrentPlatform = PLATFORM_UNKONW;
+    //
     QString text = ui->plainsrcTextEdit->toPlainText();
     detectPlatFrom(text);
 
@@ -423,6 +504,8 @@ void MainWindow::progress()
             processOneLineali(&line);
         }else if (mCurrentPlatform == PLATFORM_CALSUM){
             processOneLinecalSum(&line);
+        }else if (mCurrentPlatform == PLATFORM_TIANHEGUOJI){
+            processOneLinetianheguoji(&line);
         }
     }
 
