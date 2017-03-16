@@ -256,7 +256,7 @@ void MainWindow::processOneLinetianheguoji(QString *line)
             }else {
                 t_custerStruct.paybackInAll = 0;
             }
-
+             t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
             if (t_custerStruct.paybackInAll){
                 mCusterList.append(t_custerStruct);
             }
