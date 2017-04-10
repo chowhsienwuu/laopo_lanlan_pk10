@@ -441,7 +441,9 @@ double MainWindow::getLastNumFromString(QString rawString)
     //qDebug() << "rawString: " << rawString;
     if (!rawString.startsWith("d", Qt::CaseInsensitive)
             && !rawString.startsWith("c", Qt::CaseInsensitive)
-            && !rawString.startsWith("a", Qt::CaseInsensitive)) {
+            && !rawString.startsWith("a", Qt::CaseInsensitive)
+            &&  !rawString.startsWith("b", Qt::CaseInsensitive)
+            ) {
       //  qDebug() << "error rawString" ;
         return 0;
     }

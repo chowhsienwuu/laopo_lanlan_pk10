@@ -19,7 +19,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>算水器4.8</string>
+   <string>算水器4.9</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="layoutWidget">
