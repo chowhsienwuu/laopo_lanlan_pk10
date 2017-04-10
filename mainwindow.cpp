@@ -175,6 +175,47 @@ void MainWindow::processOneLinenanshengbaoxuan(QString *line)
     }
 }
 
+void MainWindow::processOneLinejingbaoli(QString *line)
+{
+    QStringList stringlist =  line->split(QRegularExpression("\\s+"));
+    QString t_str;
+    qDebug() << "jingbaoli " << stringlist.length() ;
+    if (stringlist.length() > 10)
+    {
+        T_custerStruct t_custerStruct;
+        initCusterStruct(&t_custerStruct);
+        t_custerStruct.type = stringlist.at(1);
+        if (t_custerStruct.type.startsWith("b", Qt::CaseInsensitive))
+        {
+            t_custerStruct.name = stringlist.at(0);
+
+            t_str = stringlist.at(3);
+            t_str = t_str.remove(QChar(','));
+            t_custerStruct.journal = t_str.toDouble();
+
+            t_str = stringlist.at(4);
+            t_str = t_str.remove(QChar(','));
+            t_custerStruct.winorlse = t_str.toDouble(); //170.7
+
+            if (t_custerStruct.type.startsWith("b", Qt::CaseInsensitive))
+            {
+                t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
+                mTotlePayback += t_custerStruct.paybackInAll;
+            }else {
+                t_custerStruct.paybackInAll = 0;
+            }
+
+            t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
+            t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
+
+            if (t_custerStruct.paybackInAll){
+                mCusterList.append(t_custerStruct);
+            }
+        }
+    }
+     qDebug() << "process one line end";
+}
+
 void MainWindow::processOneLineali(QString *line)
 {
     QStringList stringlist =  line->split(QRegularExpression("\\s+"));
@@ -336,6 +377,7 @@ void MainWindow::detectPlatFrom(QString &text)
                 break;
             }
         }
+
         if(stringlist.length() == 18){
             t_str = stringlist.at(2);
             if (t_str.startsWith("d", Qt::CaseInsensitive)
@@ -348,7 +390,7 @@ void MainWindow::detectPlatFrom(QString &text)
         }
         //nanshen baoxuan ali
         QString t_str06;
-        if(stringlist.length() == 16 || stringlist.length() == 17){
+        if(stringlist.length() == 16 || stringlist.length() == 17 ){
             t_str = stringlist.at(1);
             t_str06 = stringlist.at(6);
             if (t_str.startsWith("d", Qt::CaseInsensitive)
@@ -363,6 +405,9 @@ void MainWindow::detectPlatFrom(QString &text)
                     mCurrentPlatform = PLATFORM_NANSHENGBAOXUAN;
                     break;
                 }
+            }else if (t_str.startsWith("b", Qt::CaseInsensitive)){
+                mCurrentPlatform = PLATFORM_JINGBAOLI;
+                break;
             }
         }
         //CAL SUM ONLY.
@@ -381,7 +426,8 @@ void MainWindow::detectPlatFrom(QString &text)
     if (mCurrentPlatform == PLATFORM_NANSHENGBAOXUAN || mCurrentPlatform == PLATFORM_XINSHIJI ||
             mCurrentPlatform == PLATFORM_BAOXUAN ){
         journalpercet = 0.024;
-    }else if (mCurrentPlatform == PLATFORM_ALI || mCurrentPlatform == PLATFORM_TIANHEGUOJI){
+    }else if (mCurrentPlatform == PLATFORM_ALI || mCurrentPlatform == PLATFORM_TIANHEGUOJI
+              || mCurrentPlatform == PLATFORM_JINGBAOLI){
         journalpercet = 0.022;
     }else if (mCurrentPlatform == PLATFORM_CALSUM){
         journalpercet = 0.;
@@ -430,6 +476,8 @@ void MainWindow::calSum()
         mTableTime.append("阿里");
     }else if (mCurrentPlatform == PLATFORM_TIANHEGUOJI){
         mTableTime.append("天和国际");
+    }else if (mCurrentPlatform == PLATFORM_JINGBAOLI){
+        mTableTime.append("金宝利");
     }
 
     mTableTime.append(" 退水比例: ");
@@ -506,9 +554,11 @@ void MainWindow::progress()
             processOneLinecalSum(&line);
         }else if (mCurrentPlatform == PLATFORM_TIANHEGUOJI){
             processOneLinetianheguoji(&line);
+        }else if (mCurrentPlatform == PLATFORM_JINGBAOLI){
+             processOneLinejingbaoli(&line);
         }
     }
-
+    qDebug() << "processline end";
     for (int i = 0; i < mCusterList.size(); i++)
     {
         mcusterItem->setItem(i, 0, new QStandardItem(mCusterList.at(i).name));

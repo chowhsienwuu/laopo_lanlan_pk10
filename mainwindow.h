@@ -28,6 +28,7 @@ private:
     void processOneLineali(QString *line);
     void processOneLinecalSum(QString *line);
     void processOneLinetianheguoji(QString *line);
+    void processOneLinejingbaoli(QString *line);
 
     QString mTableTime;
     double mTotlePayback;
@@ -59,6 +60,8 @@ private:
     const int PLATFORM_ALI = 0x04;
     const int PLATFORM_CALSUM = 0X5;
     const int PLATFORM_TIANHEGUOJI = 0x6;
+    const int PLATFORM_JINGBAOLI = 0x7;
+
 
     int mCurrentPlatform;
     void detectPlatFrom(QString &str);
@@ -72,5 +75,7 @@ private slots:
     void fastPayback024();
     void refreshData(QStandardItem*);
 };
+
+
 
 #endif // MAINWINDOW_H

@@ -19,7 +19,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>算水器4.2</string>
+   <string>算水器4.8</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="layoutWidget">
@@ -56,7 +56,7 @@
           </font>
          </property>
          <property name="text">
-          <string>将报表复制到左边框,C盘D盘退水,A盘不退</string>
+          <string>将报表复制到左边框</string>
          </property>
         </widget>
        </item>
