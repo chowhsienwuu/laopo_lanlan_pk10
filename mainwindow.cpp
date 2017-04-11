@@ -19,6 +19,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->centralWidget->setLayout(ui->verticalLayout_3);
 
+    QString qs;
+    qs.append(ui->label->text());
+    qs.append("退水比例: ");
+    qs.append(QString::number(staticjournalpercet));
+
+    ui->label->setText(qs);
+
     connect(ui->plainsrcTextEdit, SIGNAL(textChanged()), this, SLOT(progress()));
     connect(ui->clearButton, SIGNAL(pressed()), this, SLOT(clear()));
     connect(ui->fastpayback_src, SIGNAL(textChanged(QString)), this, SLOT(fastPayback022()));
@@ -185,7 +192,8 @@ void MainWindow::processOneLinejingbaoli(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
-        if (t_custerStruct.type.startsWith("b", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
+                || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
 
@@ -434,21 +442,12 @@ void MainWindow::detectPlatFrom(QString &text)
         journalpercet = 0.;
     }
 
+    journalpercet = journalpercet > 0.01 ? staticjournalpercet : 0.0;
     qDebug() << "detect platform : " << mCurrentPlatform << " journalpercet : " << journalpercet << endl;
 }
 
 double MainWindow::getLastNumFromString(QString rawString)
 {
-    //qDebug() << "rawString: " << rawString;
-//    if (!rawString.startsWith("d", Qt::CaseInsensitive)
-//            && !rawString.startsWith("c", Qt::CaseInsensitive)
-//            && !rawString.startsWith("a", Qt::CaseInsensitive)
-//            &&  !rawString.startsWith("b", Qt::CaseInsensitive)
-//            ) {
-//      //  qDebug() << "error rawString" ;
-//        return 0;
-//    }
-
     int startPos = 0;
     for(int i = rawString.size() - 1; i >= 0; i--){
         QChar t_char = rawString.at(i);
@@ -467,21 +466,21 @@ double MainWindow::getLastNumFromString(QString rawString)
 void MainWindow::calSum()
 {
     mTableTime.clear();
-    mTableTime.append(" *平台: ");
+//    mTableTime.append(" *平台: ");
 
-    if (mCurrentPlatform == PLATFORM_XINSHIJI){
-        mTableTime.append("新世纪");
-    }else if (mCurrentPlatform == PLATFORM_BAOXUAN){
-        mTableTime.append("宝轩");
-    }else if (mCurrentPlatform == PLATFORM_NANSHENGBAOXUAN){
-         mTableTime.append("宝轩/南升");
-    }else if (mCurrentPlatform == PLATFORM_ALI){
-        mTableTime.append("阿里");
-    }else if (mCurrentPlatform == PLATFORM_TIANHEGUOJI){
-        mTableTime.append("天和国际");
-    }else if (mCurrentPlatform == PLATFORM_JINGBAOLI){
-        mTableTime.append("金宝利");
-    }
+//    if (mCurrentPlatform == PLATFORM_XINSHIJI){
+//        mTableTime.append("新世纪");
+//    }else if (mCurrentPlatform == PLATFORM_BAOXUAN){
+//        mTableTime.append("宝轩");
+//    }else if (mCurrentPlatform == PLATFORM_NANSHENGBAOXUAN){
+//         mTableTime.append("宝轩/南升");
+//    }else if (mCurrentPlatform == PLATFORM_ALI){
+//        mTableTime.append("阿里");
+//    }else if (mCurrentPlatform == PLATFORM_TIANHEGUOJI){
+//        mTableTime.append("天和国际");
+//    }else if (mCurrentPlatform == PLATFORM_JINGBAOLI){
+//        mTableTime.append("金宝利");
+//    }
 
     mTableTime.append(" 退水比例: ");
     mTableTime.append(QString::number(journalpercet));

@@ -50,13 +50,13 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>10</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
-          <string>将报表复制到左边框</string>
+          <string>复制到左边</string>
          </property>
         </widget>
        </item>
@@ -70,9 +70,9 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>10</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
