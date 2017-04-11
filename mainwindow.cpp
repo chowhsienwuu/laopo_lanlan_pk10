@@ -297,6 +297,7 @@ void MainWindow::processOneLinetianheguoji(QString *line)
             }else {
                 t_custerStruct.paybackInAll = 0;
             }
+             t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
              t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
             if (t_custerStruct.paybackInAll){
                 mCusterList.append(t_custerStruct);
@@ -421,14 +422,14 @@ void MainWindow::detectPlatFrom(QString &text)
                 break;
             }
         }
-
     }
     if (mCurrentPlatform == PLATFORM_NANSHENGBAOXUAN || mCurrentPlatform == PLATFORM_XINSHIJI ||
-            mCurrentPlatform == PLATFORM_BAOXUAN ){
+            mCurrentPlatform == PLATFORM_BAOXUAN || mCurrentPlatform == PLATFORM_ALI ){
         journalpercet = 0.024;
-    }else if (mCurrentPlatform == PLATFORM_ALI || mCurrentPlatform == PLATFORM_TIANHEGUOJI
-              || mCurrentPlatform == PLATFORM_JINGBAOLI){
+    }else if ( mCurrentPlatform == PLATFORM_TIANHEGUOJI){
         journalpercet = 0.022;
+    }else if (mCurrentPlatform == PLATFORM_JINGBAOLI){
+        journalpercet = 0.026;
     }else if (mCurrentPlatform == PLATFORM_CALSUM){
         journalpercet = 0.;
     }
@@ -439,14 +440,14 @@ void MainWindow::detectPlatFrom(QString &text)
 double MainWindow::getLastNumFromString(QString rawString)
 {
     //qDebug() << "rawString: " << rawString;
-    if (!rawString.startsWith("d", Qt::CaseInsensitive)
-            && !rawString.startsWith("c", Qt::CaseInsensitive)
-            && !rawString.startsWith("a", Qt::CaseInsensitive)
-            &&  !rawString.startsWith("b", Qt::CaseInsensitive)
-            ) {
-      //  qDebug() << "error rawString" ;
-        return 0;
-    }
+//    if (!rawString.startsWith("d", Qt::CaseInsensitive)
+//            && !rawString.startsWith("c", Qt::CaseInsensitive)
+//            && !rawString.startsWith("a", Qt::CaseInsensitive)
+//            &&  !rawString.startsWith("b", Qt::CaseInsensitive)
+//            ) {
+//      //  qDebug() << "error rawString" ;
+//        return 0;
+//    }
 
     int startPos = 0;
     for(int i = rawString.size() - 1; i >= 0; i--){
