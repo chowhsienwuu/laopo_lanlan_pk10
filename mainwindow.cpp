@@ -29,7 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->plainsrcTextEdit, SIGNAL(textChanged()), this, SLOT(progress()));
     connect(ui->clearButton, SIGNAL(pressed()), this, SLOT(clear()));
     connect(ui->fastpayback_src, SIGNAL(textChanged(QString)), this, SLOT(fastPayback022()));
-     connect(ui->fastpayback_src_2, SIGNAL(textChanged(QString)), this, SLOT(fastPayback024()));
+    connect(ui->fastpayback_src_2, SIGNAL(textChanged(QString)), this, SLOT(fastPayback024()));
+    connect(ui->fastpayback_src_3, SIGNAL(textChanged(QString)), this, SLOT(fastPayback026()));
+
     connect(mcusterItem, SIGNAL(itemChanged(QStandardItem*)), this,
             SLOT(refreshData(QStandardItem*)));
     mcusterItem->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("帐号")));
@@ -90,9 +92,7 @@ void MainWindow::processOneLineXinshiji(QString *line)
             t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
             t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
 
-            //if (t_custerStruct.paybackInAll){
-                mCusterList.append(t_custerStruct);
-            //}
+            mCusterList.append(t_custerStruct);
         }
     }
 }
@@ -132,9 +132,7 @@ void MainWindow::processOneLinebaoxuan(QString *line)
             t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
             t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
 
-            if (t_custerStruct.paybackInAll){
-                mCusterList.append(t_custerStruct);
-            }
+            mCusterList.append(t_custerStruct);
         }
     }
 }
@@ -175,9 +173,7 @@ void MainWindow::processOneLinenanshengbaoxuan(QString *line)
             t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
             t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
 
-            if (t_custerStruct.paybackInAll){
-                mCusterList.append(t_custerStruct);
-            }
+            mCusterList.append(t_custerStruct);
         }
     }
 }
@@ -216,9 +212,7 @@ void MainWindow::processOneLinejingbaoli(QString *line)
             t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
             t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
 
-            if (t_custerStruct.paybackInAll){
-                mCusterList.append(t_custerStruct);
-            }
+            mCusterList.append(t_custerStruct);
         }
     }
      qDebug() << "process one line end";
@@ -259,9 +253,7 @@ void MainWindow::processOneLineali(QString *line)
             t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
             t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
 
-            if (t_custerStruct.paybackInAll){
-                mCusterList.append(t_custerStruct);
-            }
+            mCusterList.append(t_custerStruct);
         }
     }
 }
@@ -307,9 +299,9 @@ void MainWindow::processOneLinetianheguoji(QString *line)
             }
              t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
              t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
-            if (t_custerStruct.paybackInAll){
-                mCusterList.append(t_custerStruct);
-            }
+
+             mCusterList.append(t_custerStruct);
+
         }
     }
 }
@@ -334,9 +326,8 @@ void MainWindow::processOneLinecalSum(QString *line)
 
         t_custerStruct.journal = intFloor(t_custerStruct.journal);
         mTotlePayback += t_custerStruct.journal;
-        if (t_custerStruct.journal){
-            mCusterList.append(t_custerStruct);
-        }
+
+        mCusterList.append(t_custerStruct);
     }
 }
 
@@ -622,6 +613,18 @@ void MainWindow::fastPayback024()
     ui->fastPaybacklable_2->setText(show);
 }
 
+void MainWindow::fastPayback026()
+{
+    QString t_str = ui->fastpayback_src_3->text();
+
+    t_str = t_str.remove(QChar(','));
+    double journal = t_str.toDouble(); //
+    journal *= 0.026;
+    int palybak = intFloor(journal);
+    QString show = "退水: " +   QString::number(palybak);
+
+    ui->fastPaybacklable_3->setText(show);
+}
 
 void MainWindow::refreshData(QStandardItem* item)
 {

@@ -48,7 +48,7 @@ private:
     T_custerStruct mTotle;
 
     double journalpercet;
-    const double staticjournalpercet = 0.024;
+    const double staticjournalpercet = 0.026;
 
     int intFloor(double in);
     void initCusterStruct(T_custerStruct *cus);
@@ -74,6 +74,7 @@ private slots:
     void clear();
     void fastPayback022();
     void fastPayback024();
+    void fastPayback026();
     void refreshData(QStandardItem*);
 };
 
