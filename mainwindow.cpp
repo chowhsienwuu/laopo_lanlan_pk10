@@ -68,6 +68,7 @@ void MainWindow::processOneLineXinshiji(QString *line)
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(2);
         if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
+               || t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)
                 || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(1); //n6888
@@ -108,6 +109,7 @@ void MainWindow::processOneLinebaoxuan(QString *line)
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
         if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
+                 || t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)
                 || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0); //n6888
@@ -149,6 +151,7 @@ void MainWindow::processOneLinenanshengbaoxuan(QString *line)
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
         if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
+                 || t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)
                 || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
@@ -189,6 +192,7 @@ void MainWindow::processOneLinejingbaoli(QString *line)
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
         if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
+                 || t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)
                 || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
@@ -229,6 +233,7 @@ void MainWindow::processOneLineali(QString *line)
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
         if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
+                 || t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)
                 || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
@@ -283,7 +288,9 @@ void MainWindow::processOneLinetianheguoji(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(2);
-        if (t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
+       || t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)
+        || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
             t_str = stringlist.at(4);
@@ -359,6 +366,7 @@ void MainWindow::detectPlatFrom(QString &text)
             QString temp = stringlist.at(1);
             if ((t_str.startsWith("d", Qt::CaseInsensitive)
                     || t_str.startsWith("c", Qt::CaseInsensitive)
+                     || t_str.startsWith("e", Qt::CaseInsensitive)
                     || t_str.startsWith("a", Qt::CaseInsensitive))
                     && temp.contains("直属会员"))
             {
@@ -370,6 +378,7 @@ void MainWindow::detectPlatFrom(QString &text)
         if(stringlist.length() == 13){
             t_str = stringlist.at(1);
             if (t_str.startsWith("d", Qt::CaseInsensitive)
+                     || t_str.startsWith("e", Qt::CaseInsensitive)
                     || t_str.startsWith("c", Qt::CaseInsensitive)
                     || t_str.startsWith("a", Qt::CaseInsensitive))
             {
@@ -381,6 +390,7 @@ void MainWindow::detectPlatFrom(QString &text)
         if(stringlist.length() == 18){
             t_str = stringlist.at(2);
             if (t_str.startsWith("d", Qt::CaseInsensitive)
+                     || t_str.startsWith("e", Qt::CaseInsensitive)
                     || t_str.startsWith("c", Qt::CaseInsensitive)
                     || t_str.startsWith("a", Qt::CaseInsensitive))
             {
@@ -394,6 +404,7 @@ void MainWindow::detectPlatFrom(QString &text)
             t_str = stringlist.at(1);
             t_str06 = stringlist.at(6);
             if (t_str.startsWith("d", Qt::CaseInsensitive)
+                     || t_str.startsWith("e", Qt::CaseInsensitive)
                     || t_str.startsWith("c", Qt::CaseInsensitive)
                     || t_str.startsWith("a", Qt::CaseInsensitive))
             {
@@ -414,6 +425,7 @@ void MainWindow::detectPlatFrom(QString &text)
         if(stringlist.length() == 10 || stringlist.length() == 9){
             t_str = stringlist.at(3);
             if (t_str.startsWith("d", Qt::CaseInsensitive)
+                     || t_str.startsWith("e", Qt::CaseInsensitive)
                     || t_str.startsWith("c", Qt::CaseInsensitive)
                     || t_str.startsWith("a", Qt::CaseInsensitive))
             {
