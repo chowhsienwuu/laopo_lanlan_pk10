@@ -67,9 +67,7 @@ void MainWindow::processOneLineXinshiji(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(2);
-        if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
-               || t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)
-                || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(1); //n6888
 
@@ -81,9 +79,7 @@ void MainWindow::processOneLineXinshiji(QString *line)
             t_str = t_str.remove(QChar(','));
             t_custerStruct.winorlse = t_str.toDouble(); //170.7
 
-            if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
-                    || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
-            {
+        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)){
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else {
@@ -108,9 +104,7 @@ void MainWindow::processOneLinebaoxuan(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
-        if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
-                 || t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)
-                || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0); //n6888
 
@@ -122,9 +116,7 @@ void MainWindow::processOneLinebaoxuan(QString *line)
             t_str = t_str.remove(QChar(','));
             t_custerStruct.winorlse = t_str.toDouble(); //170.7
 
-            if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
-                    || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
-            {
+        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)){
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else {
@@ -150,9 +142,7 @@ void MainWindow::processOneLinenanshengbaoxuan(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
-        if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
-                 || t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)
-                || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
 
@@ -164,9 +154,7 @@ void MainWindow::processOneLinenanshengbaoxuan(QString *line)
             t_str = t_str.remove(QChar(','));
             t_custerStruct.winorlse = t_str.toDouble();
 
-            if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
-                    || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
-            {
+        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)){
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else {
@@ -191,9 +179,7 @@ void MainWindow::processOneLinejingbaoli(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
-        if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
-                 || t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)
-                || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
 
@@ -205,8 +191,8 @@ void MainWindow::processOneLinejingbaoli(QString *line)
             t_str = t_str.remove(QChar(','));
             t_custerStruct.winorlse = t_str.toDouble(); //170.7
 
-            if (t_custerStruct.type.startsWith("b", Qt::CaseInsensitive))
-            {
+                if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
+                {
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else {
@@ -232,9 +218,7 @@ void MainWindow::processOneLineali(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
-        if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
-                 || t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)
-                || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
 
@@ -246,9 +230,8 @@ void MainWindow::processOneLineali(QString *line)
             t_str = t_str.remove(QChar(','));
             t_custerStruct.winorlse = t_str.toDouble(); //170.7
 
-            if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
-                    || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
-            {
+             if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
+                {
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else {
@@ -288,17 +271,15 @@ void MainWindow::processOneLinetianheguoji(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(2);
-        if (t_custerStruct.type.startsWith("d", Qt::CaseInsensitive)
-       || t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)
-        || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
             t_str = stringlist.at(4);
             t_str = t_str.remove(QChar(','));
             t_custerStruct.journal = t_str.toDouble();
 
-            if (t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
-            {
+                if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
+                   {
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else {
@@ -364,10 +345,7 @@ void MainWindow::detectPlatFrom(QString &text)
         if(stringlist.length() > 15){
             t_str = stringlist.at(2);
             QString temp = stringlist.at(1);
-            if ((t_str.startsWith("d", Qt::CaseInsensitive)
-                    || t_str.startsWith("c", Qt::CaseInsensitive)
-                     || t_str.startsWith("e", Qt::CaseInsensitive)
-                    || t_str.startsWith("a", Qt::CaseInsensitive))
+            if (t_str.startsWith("e", Qt::CaseInsensitive)
                     && temp.contains("直属会员"))
             {
                 mCurrentPlatform = PLATFORM_TIANHEGUOJI;
@@ -377,10 +355,8 @@ void MainWindow::detectPlatFrom(QString &text)
 
         if(stringlist.length() == 13){
             t_str = stringlist.at(1);
-            if (t_str.startsWith("d", Qt::CaseInsensitive)
-                     || t_str.startsWith("e", Qt::CaseInsensitive)
-                    || t_str.startsWith("c", Qt::CaseInsensitive)
-                    || t_str.startsWith("a", Qt::CaseInsensitive))
+            if (t_str.startsWith("e", Qt::CaseInsensitive)
+ )
             {
                 mCurrentPlatform = PLATFORM_BAOXUAN;
                 break;
@@ -389,10 +365,8 @@ void MainWindow::detectPlatFrom(QString &text)
 
         if(stringlist.length() == 18){
             t_str = stringlist.at(2);
-            if (t_str.startsWith("d", Qt::CaseInsensitive)
-                     || t_str.startsWith("e", Qt::CaseInsensitive)
-                    || t_str.startsWith("c", Qt::CaseInsensitive)
-                    || t_str.startsWith("a", Qt::CaseInsensitive))
+            if (t_str.startsWith("e", Qt::CaseInsensitive)
+ )
             {
                 mCurrentPlatform = PLATFORM_XINSHIJI;
                 break;
@@ -403,10 +377,8 @@ void MainWindow::detectPlatFrom(QString &text)
         if(stringlist.length() == 16 || stringlist.length() == 17 ){
             t_str = stringlist.at(1);
             t_str06 = stringlist.at(6);
-            if (t_str.startsWith("d", Qt::CaseInsensitive)
-                     || t_str.startsWith("e", Qt::CaseInsensitive)
-                    || t_str.startsWith("c", Qt::CaseInsensitive)
-                    || t_str.startsWith("a", Qt::CaseInsensitive))
+            if (t_str.startsWith("e", Qt::CaseInsensitive)
+ )
             {
               // qDebug()<< "the t_str06 " << t_str06 ;
                 if (t_str06.endsWith("%", Qt::CaseInsensitive)){
@@ -424,10 +396,8 @@ void MainWindow::detectPlatFrom(QString &text)
         //CAL SUM ONLY.
         if(stringlist.length() == 10 || stringlist.length() == 9){
             t_str = stringlist.at(3);
-            if (t_str.startsWith("d", Qt::CaseInsensitive)
-                     || t_str.startsWith("e", Qt::CaseInsensitive)
-                    || t_str.startsWith("c", Qt::CaseInsensitive)
-                    || t_str.startsWith("a", Qt::CaseInsensitive))
+            if (t_str.startsWith("e", Qt::CaseInsensitive)
+  )
             {
                 mCurrentPlatform = PLATFORM_CALSUM;
                 break;
