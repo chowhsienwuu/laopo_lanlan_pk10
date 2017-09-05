@@ -48,7 +48,11 @@ private:
     T_custerStruct mTotle;
 
     double journalpercet;
-    const double staticjournalpercet = 0.044;
+
+    //
+    const double STATIC_JOURNAL_PERCET = 0.024;
+    const char * STATIC_TYPE = "d";
+    //
 
     int intFloor(double in);
     void initCusterStruct(T_custerStruct *cus);

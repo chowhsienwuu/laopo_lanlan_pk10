@@ -20,11 +20,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->centralWidget->setLayout(ui->verticalLayout_3);
 
     QString qs;
-    qs.append(ui->label->text());
-    qs.append("退水比例: ");
-    qs.append(QString::number(staticjournalpercet));
+    qs.append(ui->labeltitle->text());
+    qs.append("退水比例:");
+    qs.append(QString::number(STATIC_JOURNAL_PERCET));
+    qs.append(" 盘别:");
+    qs.append(STATIC_TYPE);
 
-    ui->label->setText(qs);
+    ui->labeltitle->setText(qs);
 
     connect(ui->plainsrcTextEdit, SIGNAL(textChanged()), this, SLOT(progress()));
     connect(ui->clearButton, SIGNAL(pressed()), this, SLOT(clear()));
@@ -67,7 +69,7 @@ void MainWindow::processOneLineXinshiji(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(2);
-        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith(STATIC_TYPE, Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(1); //n6888
 
@@ -79,7 +81,7 @@ void MainWindow::processOneLineXinshiji(QString *line)
             t_str = t_str.remove(QChar(','));
             t_custerStruct.winorlse = t_str.toDouble(); //170.7
 
-        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)){
+        if (t_custerStruct.type.startsWith(STATIC_TYPE, Qt::CaseInsensitive)){
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else {
@@ -104,7 +106,7 @@ void MainWindow::processOneLinebaoxuan(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
-        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith(STATIC_TYPE, Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0); //n6888
 
@@ -116,7 +118,7 @@ void MainWindow::processOneLinebaoxuan(QString *line)
             t_str = t_str.remove(QChar(','));
             t_custerStruct.winorlse = t_str.toDouble(); //170.7
 
-        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)){
+        if (t_custerStruct.type.startsWith(STATIC_TYPE, Qt::CaseInsensitive)){
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else {
@@ -142,7 +144,7 @@ void MainWindow::processOneLinenanshengbaoxuan(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
-        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith(STATIC_TYPE, Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
 
@@ -154,7 +156,7 @@ void MainWindow::processOneLinenanshengbaoxuan(QString *line)
             t_str = t_str.remove(QChar(','));
             t_custerStruct.winorlse = t_str.toDouble();
 
-        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive)){
+        if (t_custerStruct.type.startsWith(STATIC_TYPE, Qt::CaseInsensitive)){
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else {
@@ -179,7 +181,7 @@ void MainWindow::processOneLinejingbaoli(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
-        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith(STATIC_TYPE, Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
 
@@ -191,7 +193,7 @@ void MainWindow::processOneLinejingbaoli(QString *line)
             t_str = t_str.remove(QChar(','));
             t_custerStruct.winorlse = t_str.toDouble(); //170.7
 
-                if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
+                if (t_custerStruct.type.startsWith(STATIC_TYPE, Qt::CaseInsensitive))
                 {
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
@@ -218,7 +220,7 @@ void MainWindow::processOneLineali(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
-        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith(STATIC_TYPE, Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
 
@@ -230,7 +232,7 @@ void MainWindow::processOneLineali(QString *line)
             t_str = t_str.remove(QChar(','));
             t_custerStruct.winorlse = t_str.toDouble(); //170.7
 
-             if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
+             if (t_custerStruct.type.startsWith(STATIC_TYPE, Qt::CaseInsensitive))
                 {
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
@@ -271,14 +273,14 @@ void MainWindow::processOneLinetianheguoji(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(2);
-        if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith(STATIC_TYPE, Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
             t_str = stringlist.at(4);
             t_str = t_str.remove(QChar(','));
             t_custerStruct.journal = t_str.toDouble();
 
-                if (t_custerStruct.type.startsWith("e", Qt::CaseInsensitive))
+                if (t_custerStruct.type.startsWith(STATIC_TYPE, Qt::CaseInsensitive))
                    {
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
@@ -345,7 +347,7 @@ void MainWindow::detectPlatFrom(QString &text)
         if(stringlist.length() > 15){
             t_str = stringlist.at(2);
             QString temp = stringlist.at(1);
-            if (t_str.startsWith("e", Qt::CaseInsensitive)
+            if (t_str.startsWith(STATIC_TYPE, Qt::CaseInsensitive)
                     && temp.contains("直属会员"))
             {
                 mCurrentPlatform = PLATFORM_TIANHEGUOJI;
@@ -355,7 +357,7 @@ void MainWindow::detectPlatFrom(QString &text)
 
         if(stringlist.length() == 13){
             t_str = stringlist.at(1);
-            if (t_str.startsWith("e", Qt::CaseInsensitive)
+            if (t_str.startsWith(STATIC_TYPE, Qt::CaseInsensitive)
  )
             {
                 mCurrentPlatform = PLATFORM_BAOXUAN;
@@ -365,7 +367,7 @@ void MainWindow::detectPlatFrom(QString &text)
 
         if(stringlist.length() == 18){
             t_str = stringlist.at(2);
-            if (t_str.startsWith("e", Qt::CaseInsensitive)
+            if (t_str.startsWith(STATIC_TYPE, Qt::CaseInsensitive)
  )
             {
                 mCurrentPlatform = PLATFORM_XINSHIJI;
@@ -377,7 +379,7 @@ void MainWindow::detectPlatFrom(QString &text)
         if(stringlist.length() == 16 || stringlist.length() == 17 ){
             t_str = stringlist.at(1);
             t_str06 = stringlist.at(6);
-            if (t_str.startsWith("e", Qt::CaseInsensitive)
+            if (t_str.startsWith(STATIC_TYPE, Qt::CaseInsensitive)
  )
             {
               // qDebug()<< "the t_str06 " << t_str06 ;
@@ -396,7 +398,7 @@ void MainWindow::detectPlatFrom(QString &text)
         //CAL SUM ONLY.
         if(stringlist.length() == 10 || stringlist.length() == 9){
             t_str = stringlist.at(3);
-            if (t_str.startsWith("e", Qt::CaseInsensitive)
+            if (t_str.startsWith(STATIC_TYPE, Qt::CaseInsensitive)
   )
             {
                 mCurrentPlatform = PLATFORM_CALSUM;
@@ -415,7 +417,7 @@ void MainWindow::detectPlatFrom(QString &text)
         journalpercet = 0.;
     }
 
-    journalpercet = journalpercet > 0.01 ? staticjournalpercet : 0.0;
+    journalpercet = journalpercet > 0.01 ? STATIC_JOURNAL_PERCET : 0.0;
     qDebug() << "detect platform : " << mCurrentPlatform << " journalpercet : " << journalpercet << endl;
 }
 
