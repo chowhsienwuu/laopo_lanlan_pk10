@@ -300,8 +300,8 @@ void MainWindow::processOneLinecalSum(QString *line)
 
     QStringList stringlist =  line->split(QRegularExpression("\\s+"));
     QString t_str;
-   // qDebug() << " processOneLinecalSum" << *line << stringlist.length();
-    if (stringlist.length() < 10 && stringlist.length() > 7)
+  //  qDebug() << " processOneLinecalSum" << *line << stringlist.length();
+    if (stringlist.length() <= 10 && stringlist.length() >= 5)
     {
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
@@ -312,6 +312,11 @@ void MainWindow::processOneLinecalSum(QString *line)
 
         t_str = stringlist.at(4);
         t_str = t_str.remove(QChar(','));
+        if (!t_str.at(0).isNumber())
+        {
+            return;
+        }
+
         t_custerStruct.journal = t_str.toDouble();
 
         t_custerStruct.journal = intFloor(t_custerStruct.journal);
@@ -396,7 +401,7 @@ void MainWindow::detectPlatFrom(QString &text)
             }
         }
         //CAL SUM ONLY.
-        if(stringlist.length() == 10 || stringlist.length() == 9){
+        if(stringlist.length() <= 10 && stringlist.length() >=5 ){
             t_str = stringlist.at(3);
             if (t_str.startsWith(STATIC_TYPE, Qt::CaseInsensitive)
   )
