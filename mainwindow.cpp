@@ -171,6 +171,7 @@ void MainWindow::processOneLinenanshengbaoxuan(QString *line)
     }
 }
 
+#if 0
 void MainWindow::processOneLinejingbaoli(QString *line)
 {
     QStringList stringlist =  line->split(QRegularExpression("\\s+"));
@@ -209,6 +210,66 @@ void MainWindow::processOneLinejingbaoli(QString *line)
     }
      qDebug() << "process one line end";
 }
+
+#else
+void MainWindow::processOneLinejingbaoli(QString *line)
+{
+    QStringList stringlist =  line->split(QRegularExpression("\\s+"));
+    QString t_str;
+    qDebug() << "jingbaoli.2019. " << stringlist.length() ;
+    if (stringlist.length() > 10)
+    {
+        T_custerStruct t_custerStruct;
+        initCusterStruct(&t_custerStruct);
+        t_custerStruct.type = stringlist.at(1);
+        if (t_custerStruct.type.startsWith("b", Qt::CaseInsensitive) || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+        {
+            t_custerStruct.name = stringlist.at(0);
+
+            t_str = stringlist.at(3);
+            t_str = t_str.remove(QChar(','));
+            t_custerStruct.journal = t_str.toDouble();
+
+            t_str = stringlist.at(4);
+            t_str = t_str.remove(QChar(','));
+            t_custerStruct.winorlse = t_str.toDouble(); //170.7
+
+            if (t_custerStruct.type.startsWith("b", Qt::CaseInsensitive))
+             {
+                journalpercet = 0.022;
+                t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
+                mTotlePayback += t_custerStruct.paybackInAll;
+            }else if (t_custerStruct.type.startsWith("c", Qt::CaseInsensitive)){
+                 journalpercet = 0.026;
+                t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
+                mTotlePayback += t_custerStruct.paybackInAll;
+            }else {
+                t_custerStruct.paybackInAll = 0;
+            }
+
+            t_custerStruct.playbackPaid = getLastNumFromString(t_custerStruct.type);
+            t_custerStruct.playbackPaying = t_custerStruct.paybackInAll - t_custerStruct.playbackPaid;
+
+            QString temp1;
+            temp1.append(t_custerStruct.type);
+            temp1.append(" 比例:");
+            temp1.append(QString::number(journalpercet * 10000));
+            t_custerStruct.type = temp1;
+
+             mCusterList.append(t_custerStruct);
+            //show fix
+            ui->labeltitle->clear();
+            QString qs;
+            qs.append(ui->labeltitle->text());
+            qs.append("退水比例:");
+            qs.append("B盘220, C盘260");
+            ui->labeltitle->setText(qs);
+        }
+    }
+     qDebug() << "process one line end";
+}
+#endif
+
 
 void MainWindow::processOneLineali(QString *line)
 {
@@ -462,8 +523,8 @@ void MainWindow::calSum()
 //        mTableTime.append("金宝利");
 //    }
 
-    mTableTime.append(" 退水比例: ");
-    mTableTime.append(QString::number(journalpercet));
+   // mTableTime.append(" 退水比例: ");
+    //mTableTime.append(QString::number(journalpercet));
     mTableTime.append(" 总退水: ");
     QString allPackback  = QString::number(intFloor(mTotlePayback), 10);
     mTableTime.append(allPackback);
@@ -544,6 +605,11 @@ void MainWindow::progress()
     for (int i = 0; i < mCusterList.size(); i++)
     {
         mcusterItem->setItem(i, 0, new QStandardItem(mCusterList.at(i).name));
+//        QString qs;
+//        qs.append(mCusterList.at(i).type);
+//        qs.append(" 比例:");
+     //   qs.append(QString::number(journalpercet));
+     //   mcusterItem->setItem(i, 1, new QStandardItem(qs));
         mcusterItem->setItem(i, 1, new QStandardItem(mCusterList.at(i).type));
         mcusterItem->setItem(i, 2, new QStandardItem(QString::number(mCusterList.at(i).journal)));
         mcusterItem->setItem(i, 3, new QStandardItem(QString::number(mCusterList.at(i).paybackInAll)));

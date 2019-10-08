@@ -50,7 +50,7 @@ private:
     double journalpercet;
 
     //
-    const double STATIC_JOURNAL_PERCET = 0.024;
+    const double STATIC_JOURNAL_PERCET = 0.022;
     const char * STATIC_TYPE = "d";
     //
 
