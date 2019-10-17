@@ -225,6 +225,10 @@ void MainWindow::processOneLinejingbaoli(QString *line)
         if (t_custerStruct.type.startsWith("b", Qt::CaseInsensitive) || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
+            if (t_custerStruct.name.endsWith("直"))
+            {
+                 t_custerStruct.name = t_custerStruct.name.remove(t_custerStruct.name.length() - 1, 1);
+            }
 
             t_str = stringlist.at(3);
             t_str = t_str.remove(QChar(','));
