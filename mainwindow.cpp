@@ -222,7 +222,8 @@ void MainWindow::processOneLinejingbaoli(QString *line)
         T_custerStruct t_custerStruct;
         initCusterStruct(&t_custerStruct);
         t_custerStruct.type = stringlist.at(1);
-        if (t_custerStruct.type.startsWith("b", Qt::CaseInsensitive) || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive))
+        if (t_custerStruct.type.startsWith("b", Qt::CaseInsensitive) || t_custerStruct.type.startsWith("c", Qt::CaseInsensitive)
+                || t_custerStruct.type.startsWith("a", Qt::CaseInsensitive))
         {
             t_custerStruct.name = stringlist.at(0);
             if (t_custerStruct.name.endsWith("直"))
@@ -237,14 +238,18 @@ void MainWindow::processOneLinejingbaoli(QString *line)
             t_str = stringlist.at(4);
             t_str = t_str.remove(QChar(','));
             t_custerStruct.winorlse = t_str.toDouble(); //170.7
-
-            if (t_custerStruct.type.startsWith("b", Qt::CaseInsensitive))
+            if (t_custerStruct.type.startsWith("a", Qt::CaseInsensitive))
              {
-                journalpercet = 0.022;
+                journalpercet = 0.030;
+                t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
+                mTotlePayback += t_custerStruct.paybackInAll;
+            }else if (t_custerStruct.type.startsWith("b", Qt::CaseInsensitive))
+             {
+                journalpercet = 0.025;
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else if (t_custerStruct.type.startsWith("c", Qt::CaseInsensitive)){
-                 journalpercet = 0.026;
+                 journalpercet = 0.029;
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else {
@@ -266,7 +271,7 @@ void MainWindow::processOneLinejingbaoli(QString *line)
             QString qs;
             qs.append(ui->labeltitle->text());
             qs.append("退水比例:");
-            qs.append("B盘220, C盘260");
+            qs.append("A盘300,B盘250, C盘290");
             ui->labeltitle->setText(qs);
         }
     }
@@ -485,6 +490,11 @@ void MainWindow::detectPlatFrom(QString &text)
         journalpercet = 0.026;
     }else if (mCurrentPlatform == PLATFORM_CALSUM){
         journalpercet = 0.;
+    }
+
+    if (FORCE_PLATFORM > 0 && FORCE_PLATFORM != PLATFORM_CALSUM){
+        mCurrentPlatform = FORCE_PLATFORM;
+        qDebug() << "强制使用平台 " << mCurrentPlatform << endl;
     }
 
     journalpercet = journalpercet > 0.01 ? STATIC_JOURNAL_PERCET : 0.0;

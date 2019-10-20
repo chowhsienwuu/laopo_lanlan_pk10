@@ -67,6 +67,8 @@ private:
     const int PLATFORM_TIANHEGUOJI = 0x6;
     const int PLATFORM_JINGBAOLI = 0x7;
 
+    //强制某平台
+    const int FORCE_PLATFORM = PLATFORM_JINGBAOLI;
 
     int mCurrentPlatform;
     void detectPlatFrom(QString &str);
