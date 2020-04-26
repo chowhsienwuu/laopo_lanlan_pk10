@@ -240,16 +240,16 @@ void MainWindow::processOneLinejingbaoli(QString *line)
             t_custerStruct.winorlse = t_str.toDouble(); //170.7
             if (t_custerStruct.type.startsWith("a", Qt::CaseInsensitive))
              {
-                journalpercet = 0.003;
+                journalpercet = 0.003 - 0.0005;
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else if (t_custerStruct.type.startsWith("b", Qt::CaseInsensitive))
              {
-                journalpercet = 0.025;
+                journalpercet = 0.025 - 0.0005;
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else if (t_custerStruct.type.startsWith("c", Qt::CaseInsensitive)){
-                 journalpercet = 0.029;
+                 journalpercet = 0.029 - 0.0005;
                 t_custerStruct.paybackInAll = intFloor(t_custerStruct.journal * journalpercet);
                 mTotlePayback += t_custerStruct.paybackInAll;
             }else {
@@ -271,7 +271,7 @@ void MainWindow::processOneLinejingbaoli(QString *line)
             QString qs;
             qs.append(ui->labeltitle->text());
             qs.append("退水比例:");
-            qs.append("A盘30,B盘250, C盘290");
+            qs.append("A盘25,B盘245, C盘285");
             ui->labeltitle->setText(qs);
         }
     }
